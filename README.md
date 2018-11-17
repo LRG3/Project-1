@@ -8,7 +8,7 @@
 
 •	Sketch of Final Product:
 
-•	APIs- Zomato, Amadeus, Airbnb
+•	APIs- Zomato, Amadeus, Hotel API TBD
 
 •	Tasks:
                 a.	Randomly Selects 3 US Beaches as options.
