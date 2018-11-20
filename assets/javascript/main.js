@@ -67,6 +67,7 @@ $('#vacation-button').on("click", function () {
     displayCityData(beachrandom)
 
 })
+<<<<<<< HEAD
 
 /*var queryFlightURL = "https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?"
 var apiFlightKey = "apikey=HEbMkphMv3ReciH7JfBcCzGQLfGG2UCk"
@@ -87,3 +88,5 @@ $.ajax({
     
     
 }) */
+=======
+>>>>>>> master
