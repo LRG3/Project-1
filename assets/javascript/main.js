@@ -73,3 +73,23 @@ $('#vacation-button').on("click", function () {
     beachrandom = beaches[Math.floor(Math.random() * beaches.length)];
 
 })
+
+/*var queryFlightURL = "https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?"
+var apiFlightKey = "apikey=HEbMkphMv3ReciH7JfBcCzGQLfGG2UCk"
+var departureDate = $("#flightStartDate").val()
+
+
+$.ajax({
+    url: "https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=HEbMkphMv3ReciH7JfBcCzGQLfGG2UCk&origin=BOS&destination=LON&departure_date=2018-12-25", //+ departureDate,
+    method: "GET"
+}).then(function (response) {
+    console.log(JSON.stringify(response));
+    
+    var FlightPrice = response.results[0].fare.total_price;
+    console.log(FlightPrice);
+    var FlightName = response.results[0].itineraries[]flights.airport;
+    console.log(FlightName);
+    
+    
+    
+}) */
