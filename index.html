@@ -29,6 +29,14 @@
       margin-right: 200px;
 
     }
+    
+    .form-group {
+      display: flex;
+    }
+
+    #ReturnDate {
+      float: right;
+    }
 
     #vacation-button {
       float: right;
@@ -37,6 +45,7 @@
     .table {
       background-color: white;
     }
+
   </style>
 
   <title>Beach Out!</title>
@@ -52,8 +61,19 @@
       <div class="row">
         <div class='col-sm-6'>
           <div class="form-group">
-            <div class='input-group date' id='flightStartDate'>
+            <div class='input-group date' id='flightStartDate'><p><small>When You'd like to leave..</small></p>
               <input type='date' class="form-control" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+          <div class='col-sm-6'>
+            <div class="form-group">
+              <div class='input-group date' id='ReturnDate'><p><small>When You'd like to come back..</small></p>
+                <input type='date' class="form-control" />
             </div>
           </div>
         </div>
@@ -76,32 +96,69 @@
   
   <div class="jumbotron jumbotron-fluid">
     <div class="container">
+      
+  <h1 class="tableHeader"><i class="fas fa-utensils"></i>  Restaurants</h1>
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Restaurant</th>
-            <th scope="col">Hotel</th>
-            <th scope="col">Restaurant Yelp</th>
-            <th scope="col">Hotel Yelp</th>
+            <th scope="col">Restaurant Name:</th>
+            <th scope="col">Price For Two:</th>
+            <th scope="col">Restaurant Address:</th>
+            <th scope="col">Link to Review:</th>
           </tr>
         </thead>
         <tbody>
-
+          <tr>
+          <td class="ResName"></td>
+          <td class="ResforTwo"></td>
+          <td class="ResAddress"></td>
+          <td class="ReviewLink"></td>
+        </tr>
         </tbody>
-      </table>
+        
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Hotel Name:</th>
+                    <th scope="col">Hotel Price:</th>
+                    <th scope="col">Check-in time:</th>
+                    <th scope="col">Hotel Address:</th>
+                    <th scope="col">Hotel Review:</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <td class="HoName"></td>
+                    <td class="HoPrice"></td>
+                    <td class="Check-in"></td>
+                    <td class="HoAddress"></td>
+                    <td class="HoReview"></td>
+                  </tr>
+                  </tbody>
+                  <h2 class="tableHeader"><i class="fas fa-hotel"></i> Hotels</h1>
+                
 
-      <div class="card">
-        <h5 class="card-header">Flights</h5>
-        <div class="card-body">
-          <h5 class="card-title">Flight Name</h5>
-          <p class="card-text">flight price</p>
-          <br>
-          <h5 class="card-title">Flight Name</h5>
-          <p class="card-text">flight price</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
-    </div>
+                
+                  <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Airline:</th>
+                            <th scope="col">Price:</th>
+                            <th scope="col">Departure Time:</th>
+                            <th scope="col">Return Time:</th>
+                            <th scope="col">Arrival of flight:</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            <td class="Airline"></td>
+                            <td class="FlightPrice"></td>
+                            <td class="LeaveDate"></td>
+                            <td class="ReturnDate"></td>
+                            <td class="FlightArrival"></td>
+                          </tr>
+                          </tbody>
+                          <h1 class="tableHeader"><i class="fas fa-plane-departure"></i> Flight</h1>
 
   </div>
   </div>

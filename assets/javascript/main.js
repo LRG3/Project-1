@@ -4,6 +4,7 @@ var beaches = ["Kapalua Bay Beach, Maui, Hawaii", "Ocracoke Lifeguarded Beach, O
     "Beachwalker Park, Kiawah Island, South Carolina"];
 
 var beachrandom = beaches[Math.floor(Math.random() * beaches.length)];
+console.log(beachrandom);
 
 function displayCityData(city) {
 
@@ -34,49 +35,50 @@ function displayCityData(city) {
             var topRestaurantURL = response.best_rated_restaurant[0].restaurant.url;
             var topRestaurantAddress = response.best_rated_restaurant[0].restaurant.location.address;
             var avgCostForTwo = response.best_rated_restaurant[0].restaurant.average_cost_for_two
-
-
             console.log(cityPopularity, nightlifePopularity, topRestaurant, avgCostForTwo)
             $('tbody').append(
                 `<tr><td><a href="${topRestaurantURL}" target="blank">${topRestaurant}</a></td>
-                     <td>${topRestaurantAddress}</td>
-                     <td>$${avgCostForTwo}</td>                        
-                     <td>#</td>
-                     <td>#</td></tr>`)
-
-
-            var restaurantID = response.best_rated_restaurant[0].restaurant.R.res_id;
-            var restaurantDetailQueryURL = "https://developers.zomato.com/api/v2.1/restaurant?res_id=" + restaurantID + "&apikey=937d785cc1c1b2ac1098e43a13b9cf22"
-
-            $.ajax({
-                url: restaurantDetailQueryURL,
-                method: "GET"
-            }).then(function (response) {
-                console.log(response)
-                var userRating = response.user_rating.aggregate_rating;
-                var userVotes = response.user_rating.votes;
-                var restaurantLocation = response.location.address
-                var avgCost = response.average_cost_for_two;
-                var cuisines = response.cuisines;
-
-                console.log(userRating, userVotes, restaurantLocation, avgCost, cuisines);
-
-            })
+                <td>${topRestaurantAddress}</td>
+                <td>$${avgCostForTwo}</td>                        
+                <td>#</td>
+                <td>#</td></tr>`)
         })
+    })
+
+
+    var restaurantID = response.best_rated_restaurant[0].restaurant.R.res_id;
+    var restaurantDetailQueryURL = "https://developers.zomato.com/api/v2.1/restaurant?res_id=" + restaurantID + "&apikey=937d785cc1c1b2ac1098e43a13b9cf22"
+
+    $.ajax({
+        url: restaurantDetailQueryURL,
+        method: "GET"
+    }).then(function (response) {
+        console.log(response)
+        var userRating = response.user_rating.aggregate_rating;
+        var userVotes = response.user_rating.votes;
+        var restaurantLocation = response.location.address
+        var avgCost = response.average_cost_for_two;
+        var cuisines = response.cuisines;
+
+        console.log(userRating, userVotes, restaurantLocation, avgCost, cuisines);
+
+    })  
+    var hotelQueryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-airport?location=" + location + "&apikey=KWxHu3JXbSfuZ0ZfU5AmxbNfkmVaKQTX";
+
+    $.ajax({
+        url: hotelQueryURL,
+        method: "GET"
+    }).then(function (response) {
+        console.log(JSON.stringify(response));
+        var hotelName = response.results.property_code;
+        var price = response.results.total_price;
+
+        console.log(hotelQueryURL)
+
     })
 
 }
 
-$('#vacation-button').on("click", function () {
-    console.log(beachrandom)
-    displayCityData(beachrandom)
-    beachrandom = beaches[Math.floor(Math.random() * beaches.length)];
-
-})
-
-/*var queryFlightURL = "https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?"
-var apiFlightKey = "apikey=HEbMkphMv3ReciH7JfBcCzGQLfGG2UCk"
-var departureDate = $("#flightStartDate").val()
 
 
 $.ajax({
@@ -84,12 +86,27 @@ $.ajax({
     method: "GET"
 }).then(function (response) {
     console.log(JSON.stringify(response));
-    
+
     var FlightPrice = response.results[0].fare.total_price;
     console.log(FlightPrice);
-    var FlightName = response.results[0].itineraries[]flights.airport;
+    var FlightName = response.results[0].itineraries.flights.airport;
     console.log(FlightName);
+
+    $("#Flights").append(
+        `<tr><td>#></td>
+        <td>${FlightPrice}</td>
+        <td>${departureDate}</td>                        
+        <td>${returnDate}</td>
+        <td>#</td>
+        </tr>`)
+})
+
+$('#vacation-button').on("click", function () {
+    console.log(beachrandom)
+    displayCityData(beachrandom)
+    beachrandom = beaches[Math.floor(Math.random() * beaches.length)];
+    departureDate = $("#flightStartDate").val()
+    returnDate = $("#returnDate").val()
+    console.log(departureDate, returnDate)
     
-    
-    
-}) */
+})
