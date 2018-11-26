@@ -1,112 +1,121 @@
+//Random Beach Array
 var beaches = ["Kapalua Bay Beach, Maui, Hawaii", "Ocracoke Lifeguarded Beach, Outer Banks, North Carolina", "Grayton Beach State Park, Florida Panhandle",
     "Coopers Beach, Southampton, New York", "Coast Guard Beach, Cape Cod, Massachusetts", "Lighthouse Beach, Buxton, Outer Banks, North Carolina",
     "Caladesi Island State Park, Dunedin/Clearwater, Florida", "Hapuna Beach State Park, Big Island, Hawaii", "Coronado Beach, San Diego, California",
     "Beachwalker Park, Kiawah Island, South Carolina"];
 
+// Airport Array - order matches beach array (substituted major airports as hotel API did not recognize some smaller airports)
+var destinationCode = ["OGG", "CLT", "MCO", "JFK", "BOS", "CLT", "TPA", "KOA", "SAN", "CHS"]
+
+//Generates Random Beach Location
 var beachrandom = beaches[Math.floor(Math.random() * beaches.length)];
-console.log(beachrandom);
 
-function displayCityData(city) {
+//Creates a variable for the appropriate Airport code to match beach location
+var selectedDestinationCode = "";
+for (var i = 0; i < beaches.length; i++) {
+    if (beachrandom === beaches[i]) {
+        selectedDestinationCode = destinationCode[i];
+        console.log(selectedDestinationCode)
+    }
+}
 
-
+//This function runs the whole application... parameters are used to provide the data from user.
+function displayCityData(beachLocation, depDate, returnDate, userAirportCode) {
+    //Lines 25-68 are for Restaurant API
     var clientID = "-_-qsu9VN_Mu1cRQ_CEfbA"
     var apikey = "eGyFYoGa3oYrHwELLpuXsE9A1l9W6d6AoJszCKMPa3M9SNgR2kx1md-nelFS1jJdfOb1sCD3knBmuWA7kDTZSoZMehkn0-Avx1VDY6QMhAX45RpIuKyxSBZ53eTsW3Yx"
-    var queryURL = "https://developers.zomato.com/api/v2.1/locations?query=" + city + "&apikey=937d785cc1c1b2ac1098e43a13b9cf22";
+    var queryURL = "https://developers.zomato.com/api/v2.1/locations?query=" + beachLocation + "&apikey=937d785cc1c1b2ac1098e43a13b9cf22";
 
 
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function (response) {
-        console.log(JSON.stringify(response));
         var entityID = response.location_suggestions[0].entity_id;
         var entityType = response.location_suggestions[0].entity_type;
-        console.log(entityID, entityType);
         var locationDetailQueryURL = "https://developers.zomato.com/api/v2.1/location_details?entity_id=" + entityID + "&entity_type=" + entityType + "&apikey=937d785cc1c1b2ac1098e43a13b9cf22"
 
         $.ajax({
             url: locationDetailQueryURL,
             method: "GET"
         }).then(function (response) {
-            console.log(JSON.stringify(response));
-            var cityPopularity = response.popularity;
-            var nightlifePopularity = response.nightlife_index;
             var topRestaurant = response.best_rated_restaurant[0].restaurant.name;
             var topRestaurantURL = response.best_rated_restaurant[0].restaurant.url;
             var topRestaurantAddress = response.best_rated_restaurant[0].restaurant.location.address;
             var avgCostForTwo = response.best_rated_restaurant[0].restaurant.average_cost_for_two
-            console.log(cityPopularity, nightlifePopularity, topRestaurant, avgCostForTwo)
-            $('tbody').append(
-                `<tr><td><a href="${topRestaurantURL}" target="blank">${topRestaurant}</a></td>
-                <td>${topRestaurantAddress}</td>
-                <td>$${avgCostForTwo}</td>                        
-                <td>#</td>
-                <td>#</td></tr>`)
+            $('.ResName').html(`<a href="${topRestaurantURL}" target="blank">${topRestaurant}</a>`)
+            $('.ResforTwo').append("$" + avgCostForTwo);
+            $('.ResAddress').append(topRestaurantAddress);
+
+            var restaurantID = response.best_rated_restaurant[0].restaurant.R.res_id;
+            console.log(restaurantID)
+            var restaurntDetailQueryURL = "https://developers.zomato.com/api/v2.1/restaurant?res_id=" + restaurantID + "&apikey=937d785cc1c1b2ac1098e43a13b9cf22"
+
+
+
+            $.ajax({
+                url: restaurntDetailQueryURL,
+                method: "GET"
+            }).then(function (response) {
+                var restaurantLocation = response.location.address
+                var avgCost = response.average_cost_for_two;
+                var cuisines = response.cuisines;
+                console.log(restaurantLocation, avgCost, cuisines);
+                $('.Cuisines').append(cuisines);
+
+            })
         })
     })
 
-
-    var restaurantID = response.best_rated_restaurant[0].restaurant.R.res_id;
-    var restaurantDetailQueryURL = "https://developers.zomato.com/api/v2.1/restaurant?res_id=" + restaurantID + "&apikey=937d785cc1c1b2ac1098e43a13b9cf22"
-
-    $.ajax({
-        url: restaurantDetailQueryURL,
-        method: "GET"
-    }).then(function (response) {
-        console.log(response)
-        var userRating = response.user_rating.aggregate_rating;
-        var userVotes = response.user_rating.votes;
-        var restaurantLocation = response.location.address
-        var avgCost = response.average_cost_for_two;
-        var cuisines = response.cuisines;
-
-        console.log(userRating, userVotes, restaurantLocation, avgCost, cuisines);
-
-    })  
-    var hotelQueryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-airport?location=" + location + "&apikey=KWxHu3JXbSfuZ0ZfU5AmxbNfkmVaKQTX";
-
+    //Lines 70-95 are hotel API
+    var hotelQueryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-airport/?apikey=KWxHu3JXbSfuZ0ZfU5AmxbNfkmVaKQTX&location=" + selectedDestinationCode + "&check_in=" + depDate + "&check_out=" + returnDate;
     $.ajax({
         url: hotelQueryURL,
         method: "GET"
     }).then(function (response) {
         console.log(JSON.stringify(response));
-        var hotelName = response.results.property_code;
-        var price = response.results.total_price;
+        var hotelName = response.results[0].property_name;
+        var hotelPrice = response.results[0].total_price.amount;
+        var hotelStreet = response.results[0].address.line1;
+        var hotelCity = response.results[0].address.city;
+        var hotelState = response.results[0].address.region;
+        var hotelPostal = response.results[0].address.postal_code;
+        var fullAddress = hotelStreet + "" + hotelCity + "" + hotelState + "" + hotelPostal;
+        var roomType = response.results[0].rooms[0].room_type_info.room_type;
 
-        console.log(hotelQueryURL)
-
+        $(".HoName").append(hotelName);
+        $(".HoPrice").append("$" + hotelPrice);
+        $(".HoAddress").append(fullAddress);
+        $(".HoRoomType").append(roomType);
     })
 
+
+
+    //Lines 95-112 are Flight API
+    $.ajax({
+        url: "https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=HEbMkphMv3ReciH7JfBcCzGQLfGG2UCk&origin=" + userAirportCode + "&destination=" + selectedDestinationCode + "&departure_date=" + depDate + "&return_date=" + returnDate,
+        method: "GET"
+    }).then(function (response) {
+        var flightPrice = response.results[0].fare.total_price;
+        var departsAt = moment(response.results[0].itineraries[0].outbound.flights[0].departs_at).format("MM/DD HH:mm");
+        var arrivesAt = moment(response.results[0].itineraries[0].outbound.flights[0].arrives_at).format("MM/DD HH:mm");
+        var duration = response.results[0].itineraries[0].outbound.duration;
+        var airlineCode = response.results[0].itineraries[0].outbound.flights[0].operating_airline;
+        console.log(airlineCode);
+        $(".Airline").append(`<a href="https://www.airfarewatchdog.com/airline-codes/" target="blank">${airlineCode}</a>`)
+        $(".FlightPrice").append("$" + flightPrice);
+        $(".LeaveDate").append(departsAt);
+        $(".FlightArrival").append(arrivesAt);
+        $(".Duration").append(duration);
+    })
 }
 
-
-
-$.ajax({
-    url: "https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=HEbMkphMv3ReciH7JfBcCzGQLfGG2UCk&origin=BOS&destination=LON&departure_date=2018-12-25", //+ departureDate,
-    method: "GET"
-}).then(function (response) {
-    console.log(JSON.stringify(response));
-
-    var FlightPrice = response.results[0].fare.total_price;
-    console.log(FlightPrice);
-    var FlightName = response.results[0].itineraries.flights.airport;
-    console.log(FlightName);
-
-    $("#Flights").append(
-        `<tr><td>#></td>
-        <td>${FlightPrice}</td>
-        <td>${departureDate}</td>                        
-        <td>${returnDate}</td>
-        <td>#</td>
-        </tr>`)
-})
-
+//Button click event which sets EVERYTHING in motion.
 $('#vacation-button').on("click", function () {
-    console.log(beachrandom)
-    displayCityData(beachrandom)
+    depDate = $("#departure-date").val();
+    returnDate = $("#returnDate").val();
+    userAirportCode = $("#user-airport").val().trim();
+    displayCityData(beachrandom, depDate, returnDate, userAirportCode);
     beachrandom = beaches[Math.floor(Math.random() * beaches.length)];
-    departureDate = $("#flightStartDate").val()
-    returnDate = $("#returnDate").val()
-    console.log(departureDate, returnDate)
-    
+
 })
