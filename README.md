@@ -8,10 +8,10 @@
 
 •	Sketch of Final Product:
 
-•	APIs- Zomato, Amadeus, Hotel API TBD
+•	APIs- Zomato, Amadeus for flights and hotels
 
 •	Tasks:
                 a.	Randomly Selects 3 US Beaches as options.
                 b.	Provides flights to the locations of the 3 US Beaches.
                 c.	Provides hotels in the locations of the 3 US Beaches.
-                d.	Once selected, total vacation expense is populated. 
+                d.	Email itinerary. 
