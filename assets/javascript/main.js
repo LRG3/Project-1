@@ -5,19 +5,23 @@ var beaches = ["Kapalua Bay Beach, Maui, Hawaii", "Ocracoke Lifeguarded Beach, O
     "Beachwalker Park, Kiawah Island, South Carolina"];
 
 // Airport Array - order matches beach array (substituted major airports as hotel API did not recognize some smaller airports)
-var destinationCode = ["OGG", "CLT", "MCO", "JFK", "BOS", "CLT", "TPA", "KOA", "SAN", "CHS"]
+var destinationCode = ["OGG", "EWN", "ECP", "JFK", "MVY", "EWN", "PIE", "KOA", "SAN", "HHH"]
 
 //Generates Random Beach Location
 var beachrandom = beaches[Math.floor(Math.random() * beaches.length)];
 
 //Creates a variable for the appropriate Airport code to match beach location
 var selectedDestinationCode = "";
-for (var i = 0; i < beaches.length; i++) {
-    if (beachrandom === beaches[i]) {
-        selectedDestinationCode = destinationCode[i];
-        console.log(selectedDestinationCode)
+
+function generateAirportCode() {
+    for (var i = 0; i < beaches.length; i++) {
+        if (beachrandom === beaches[i]) {
+            selectedDestinationCode = destinationCode[i];
+            console.log(selectedDestinationCode)            
+        }
     }
 }
+generateAirportCode();
 
 //This function runs the whole application... parameters are used to provide the data from user.
 function displayCityData(beachLocation, depDate, returnDate, userAirportCode) {
@@ -69,53 +73,54 @@ function displayCityData(beachLocation, depDate, returnDate, userAirportCode) {
 
     //Lines 70-95 are hotel API
     var hotelQueryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-airport/?apikey=KWxHu3JXbSfuZ0ZfU5AmxbNfkmVaKQTX&location=" + selectedDestinationCode + "&check_in=" + depDate + "&check_out=" + returnDate;
+    // var hotelQueryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-airport/?apikey=KWxHu3JXbSfuZ0ZfU5AmxbNfkmVaKQTX&location=" + selectedDestinationCode + "&check_in=2019-01-02&check_out=2019-01-09"
     $.ajax({
         url: hotelQueryURL,
         method: "GET"
     }).then(function (response) {
         console.log(JSON.stringify(response));
-        var hotelName = response.results[0].property_name;
-        var hotelPrice = response.results[0].total_price.amount;
-        var hotelStreet = response.results[0].address.line1;
-        var hotelCity = response.results[0].address.city;
-        var hotelState = response.results[0].address.region;
-        var hotelPostal = response.results[0].address.postal_code;
-        var fullAddress = hotelStreet + "" + hotelCity + "" + hotelState + "" + hotelPostal;
-        var roomType = response.results[0].rooms[0].room_type_info.room_type;
+        // var hotelName = response.results[0].property_name;
+        // var hotelPrice = response.results[0].total_price.amount;
+        // var hotelStreet = response.results[0].address.line1;
+        // var hotelCity = response.results[0].address.city;
+        // var hotelState = response.results[0].address.region;
+        // var hotelPostal = response.results[0].address.postal_code;
+        // var fullAddress = hotelStreet + "" + hotelCity + "" + hotelState + "" + hotelPostal;
+        // var roomType = response.results[0].rooms[0].room_type_info.room_type;
 
-        $(".HoName").append(hotelName);
-        $(".HoPrice").append("$" + hotelPrice);
-        $(".HoAddress").append(fullAddress);
-        $(".HoRoomType").append(roomType);
+        // $(".HoName").append(hotelName);
+        // $(".HoPrice").append("$" + hotelPrice);
+        // $(".HoAddress").append(fullAddress);
+        // $(".HoRoomType").append(roomType);
     })
 
 
-
+    $(".ArrivalAirport").append(`<a href="https://en.wikipedia.org/wiki/List_of_airports_by_IATA_code:_A" target="blank">${selectedDestinationCode}</a>`)
     //Lines 95-112 are Flight API
     $.ajax({
-        url: "https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=HEbMkphMv3ReciH7JfBcCzGQLfGG2UCk&origin=" + userAirportCode + "&destination=" + selectedDestinationCode + "&departure_date=" + depDate + "&return_date=" + returnDate,
+        url: "https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=HEbMkphMv3ReciH7JfBcCzGQLfGG2UCk&origin=" + userAirportCode + "&destination=" + selectedDestinationCode + "&departure_date=" + depDate + "&return_date=" + returnDate + "&number_of_results=1",
         method: "GET"
     }).then(function (response) {
         var flightPrice = response.results[0].fare.total_price;
-        var departsAt = moment(response.results[0].itineraries[0].outbound.flights[0].departs_at).format("MM/DD HH:mm");
-        var arrivesAt = moment(response.results[0].itineraries[0].outbound.flights[0].arrives_at).format("MM/DD HH:mm");
+        var departsAt = moment(response.results[0].itineraries[0].outbound.flights[0].departs_at).format("MM/DD/YYYY hh:mm a ");
+        var arrivesAt = moment(response.results[0].itineraries[0].outbound.flights[(response.results[0].itineraries[0].outbound.flights.length - 1)].arrives_at).format("MM/DD/YYYY hh:mm a");
         var duration = response.results[0].itineraries[0].outbound.duration;
         var airlineCode = response.results[0].itineraries[0].outbound.flights[0].operating_airline;
-        console.log(airlineCode);
         $(".Airline").append(`<a href="https://www.airfarewatchdog.com/airline-codes/" target="blank">${airlineCode}</a>`)
         $(".FlightPrice").append("$" + flightPrice);
         $(".LeaveDate").append(departsAt);
-        $(".FlightArrival").append(arrivesAt);
+        $(".FlightArrival").append(arrivesAt);        
         $(".Duration").append(duration);
     })
 }
 
 //Button click event which sets EVERYTHING in motion.
 $('#vacation-button').on("click", function () {
+    $('td').empty();   
     depDate = $("#departure-date").val();
     returnDate = $("#returnDate").val();
     userAirportCode = $("#user-airport").val().trim();
     displayCityData(beachrandom, depDate, returnDate, userAirportCode);
     beachrandom = beaches[Math.floor(Math.random() * beaches.length)];
-
+    generateAirportCode();
 })
