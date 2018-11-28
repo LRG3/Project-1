@@ -4,6 +4,71 @@ var beaches = ["Kapalua Bay Beach, Maui, Hawaii", "Ocracoke Lifeguarded Beach, O
     "Caladesi Island State Park, Dunedin/Clearwater, Florida", "Hapuna Beach State Park, Big Island, Hawaii", "Coronado Beach, San Diego, California",
     "Beachwalker Park, Kiawah Island, South Carolina"];
 
+var hotelData = [
+    {
+        "Kapalua Bay Beach, Maui, Hawaii": {
+            "address": "1 Ritz-Carlton Drive, Kapalua, HI",
+            "name": "The Ritz-Carlton, Kapalua",
+            "price": "459",
+            "roomType": "Deluxe King or Queen Room"
+        },
+        "Ocracoke Lifeguarded Beach, Outer Banks, North Carolina": {
+            "address": "300 Budleigh Street, Manteo, NC",
+            "name": "Cameron House Inn",
+            "price": "173",
+            "roomType": "Queen Room with Spa Bath - Non-refundable"
+        },
+        "Grayton Beach State Park, Florida Panhandle": {
+            "address": "34 Goldenrod Circle, Santa Rosa Beach, FL",
+            "name": "WaterColor Inn & Resort",
+            "price": "274",
+            "roomType": "BeachFront Coastal View"
+        },
+        "Coopers Beach, Southampton, New York": {
+            "address": "1 Bridgehampton Sag Harbor Turnpike, Bridgehampton, NY",
+            "name": "Topping Rose House",
+            "price": "561",
+            "roomType": "Studio King - Non-refundable"
+        },
+        "Coast Guard Beach, Cape Cod, Massachusetts": {
+            "address": "2907 Main Street, Brewster, MA",
+            "name": "The Mansion at Ocean Edge Resort & Golf Club",
+            "price": "175",
+            "roomType": "Deluxe Double Room - Non-refundable"
+        },
+        "Lighthouse Beach, Buxton, Outer Banks, North Carolina": {
+            "address": "46556 Highway 12, Buxton, NC",
+            "name": "Cape Hatteras Motel",
+            "price": "119",
+            "roomType": "Queen Room with Two Queen Beds - Oceanfront"
+        },
+        "Caladesi Island State Park, Dunedin/Clearwater, Florida": {
+            "address": "301 South Gulfview Boulevard, Clearwater, FL",
+            "name": "Hyatt Regency Clearwater Beach Resort & Spa",
+            "price": "244",
+            "roomType": "Deluxe Queen Room with Two Queen Beds"
+        },
+        "Hapuna Beach State Park, Big Island, Hawaii": {
+            "address": "62-100 Kauna Oa Drive, Kamuela, HI",
+            "name": "The Westin Hapuna Beach Resort",
+            "price": "615",
+            "roomType": "Deluxe Queen - Beachfront"
+        },
+        "Coronado Beach, San Diego, California": {
+            "address": "1003 Coast Boulevard, San Diego, CA",
+            "name": "Pantai Inn",
+            "price": "390",
+            "roomType": "One-Bedroom Cottage with Partial Ocean View"
+        },
+        "Beachwalker Park, Kiawah Island, South Carolina": {
+            "address": "334 Meeting Street, Charleston, SC",
+            "name": "The Dewberry Charleston",
+            "price": "285",
+            "roomType": "Grand 2 Queens"
+        }
+    }
+]
+
 // Airport Array - order matches beach array (substituted major airports as hotel API did not recognize some smaller airports)
 var destinationCode = ["OGG", "EWN", "ECP", "JFK", "MVY", "EWN", "PIE", "KOA", "SAN", "HHH"]
 
@@ -12,16 +77,31 @@ var beachrandom = beaches[Math.floor(Math.random() * beaches.length)];
 
 //Creates a variable for the appropriate Airport code to match beach location
 var selectedDestinationCode = "";
+var selectedHotel = "";
 
 function generateAirportCode() {
     for (var i = 0; i < beaches.length; i++) {
         if (beachrandom === beaches[i]) {
             selectedDestinationCode = destinationCode[i];
-            console.log(selectedDestinationCode)            
+            selectedHotel = hotelData[0][beachrandom];
+            console.log(beachrandom, selectedDestinationCode, selectedHotel)
         }
     }
 }
 generateAirportCode();
+
+//Band-Aid for Hotel Data while the API is down Uses HotelData array
+function populateHotelData() {
+    var hotelName = selectedHotel.name;
+    var hotelPrice = selectedHotel.price;
+    var fullAddress = selectedHotel.address;
+    var roomType = selectedHotel.roomType;
+
+    $(".HoName").append(hotelName);
+    $(".HoPrice").append("$" + hotelPrice);
+    $(".HoAddress").append(fullAddress);
+    $(".HoRoomType").append(roomType);
+}
 
 //This function runs the whole application... parameters are used to provide the data from user.
 function displayCityData(beachLocation, depDate, returnDate, userAirportCode) {
@@ -71,28 +151,32 @@ function displayCityData(beachLocation, depDate, returnDate, userAirportCode) {
         })
     })
 
-    //Lines 70-95 are hotel API
-    var hotelQueryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-airport/?apikey=KWxHu3JXbSfuZ0ZfU5AmxbNfkmVaKQTX&location=" + selectedDestinationCode + "&check_in=" + depDate + "&check_out=" + returnDate;
-    // var hotelQueryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-airport/?apikey=KWxHu3JXbSfuZ0ZfU5AmxbNfkmVaKQTX&location=" + selectedDestinationCode + "&check_in=2019-01-02&check_out=2019-01-09"
-    $.ajax({
-        url: hotelQueryURL,
-        method: "GET"
-    }).then(function (response) {
-        console.log(JSON.stringify(response));
-        // var hotelName = response.results[0].property_name;
-        // var hotelPrice = response.results[0].total_price.amount;
-        // var hotelStreet = response.results[0].address.line1;
-        // var hotelCity = response.results[0].address.city;
-        // var hotelState = response.results[0].address.region;
-        // var hotelPostal = response.results[0].address.postal_code;
-        // var fullAddress = hotelStreet + "" + hotelCity + "" + hotelState + "" + hotelPostal;
-        // var roomType = response.results[0].rooms[0].room_type_info.room_type;
 
-        // $(".HoName").append(hotelName);
-        // $(".HoPrice").append("$" + hotelPrice);
-        // $(".HoAddress").append(fullAddress);
-        // $(".HoRoomType").append(roomType);
-    })
+
+
+
+    //Hotel API --- NOT WORKING(AMADEUS SUPPORT WORKING ON ISSUE)  REPLACEMENT BAND AID ABOVE
+    // var hotelQueryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-airport/?apikey=KWxHu3JXbSfuZ0ZfU5AmxbNfkmVaKQTX&location=" + selectedDestinationCode + "&check_in=" + depDate + "&check_out=" + returnDate;
+    // var hotelQueryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-airport/?apikey=KWxHu3JXbSfuZ0ZfU5AmxbNfkmVaKQTX&location=" + selectedDestinationCode + "&check_in=2019-01-02&check_out=2019-01-09"
+    // $.ajax({
+    //     url: hotelQueryURL,
+    //     method: "GET"
+    // }).then(function (response) {
+    //     console.log(JSON.stringify(response));
+    // var hotelName = response.results[0].property_name;
+    // var hotelPrice = response.results[0].total_price.amount;
+    // var hotelStreet = response.results[0].address.line1;
+    // var hotelCity = response.results[0].address.city;
+    // var hotelState = response.results[0].address.region;
+    // var hotelPostal = response.results[0].address.postal_code;
+    // var fullAddress = hotelStreet + "" + hotelCity + "" + hotelState + "" + hotelPostal;
+    // var roomType = response.results[0].rooms[0].room_type_info.room_type;
+
+    // $(".HoName").append(hotelName);
+    // $(".HoPrice").append("$" + hotelPrice);
+    // $(".HoAddress").append(fullAddress);
+    // $(".HoRoomType").append(roomType);
+    // })
 
 
     $(".ArrivalAirport").append(`<a href="https://en.wikipedia.org/wiki/List_of_airports_by_IATA_code:_A" target="blank">${selectedDestinationCode}</a>`)
@@ -109,18 +193,21 @@ function displayCityData(beachLocation, depDate, returnDate, userAirportCode) {
         $(".Airline").append(`<a href="https://www.airfarewatchdog.com/airline-codes/" target="blank">${airlineCode}</a>`)
         $(".FlightPrice").append("$" + flightPrice);
         $(".LeaveDate").append(departsAt);
-        $(".FlightArrival").append(arrivesAt);        
+        $(".FlightArrival").append(arrivesAt);
         $(".Duration").append(duration);
     })
 }
 
 //Button click event which sets EVERYTHING in motion.
 $('#vacation-button').on("click", function () {
-    $('td').empty();   
+    $('td').empty();
     depDate = $("#departure-date").val();
     returnDate = $("#returnDate").val();
     userAirportCode = $("#user-airport").val().trim();
     displayCityData(beachrandom, depDate, returnDate, userAirportCode);
+    populateHotelData();
     beachrandom = beaches[Math.floor(Math.random() * beaches.length)];
+    selectedHotel = hotelData[0][beachrandom];
     generateAirportCode();
+    
 })
