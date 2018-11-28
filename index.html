@@ -8,45 +8,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
     crossorigin="anonymous">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
   <!-- CSS -->
-  <style>
-
-    body {
-          height: 100%;
-          background-image: url(https://cache.desktopnexus.com/cropped-wallpapers/1992/1992196-1882x1058-[DesktopNexus.com].jpg?st=sWqlNLdPQaV6O0hGlv6o0g&e=1542306100)
-        }
-    
-        .jumbotron {
-          background-color: rgb(221, 252, 253);
-          font-weight: bold;
-          color: black;
-          padding: 50px;
-          margin-left: 200px;
-          margin-right: 200px;
-    
-        }
-        
-        .form-group {
-          display: flex;
-        }
-    
-        #ReturnDate {
-          float: right;
-        }
-    
-        #vacation-button {
-          float: right;
-        }
-    
-        .table {
-          background-color: white;
-        }
-    
-      </style>
+  <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
   <title>Beach Out!</title>
 </head>
@@ -92,15 +63,27 @@
         </div>
       </div>
     </div>
-    <a id="vacation-button" class="btn btn-primary btn-lg" href="#" role="button"><i class="fa fa-plane"
-        aria-hidden="true"></i>Vacation</a>
+    <!-- Email Address Input Field -->
+    <div class="container">
+      <div class="row">
+        <div class='col-sm-6'>
+          <div class="form-group">
+            <div class='input-group email-form' id='Email'>
+              <input id="email-add" type='text' placeholder="Email Address Confirmation" class="form-control">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Email Address Input Field -->
+    <a id="vacation-button" class="btn btn-primary btn-lg" href="#" role="button"><i class="fa fa-plane" aria-hidden="true"></i>Vacation</a>
   </div>
 
 
   <div class="jumbotron jumbotron-fluid">
     <div class="container">
 
-      <h1 class="tableHeader"><i class="fas fa-utensils"></i> Restaurants</h1>
+      <h1 class="tableHeader"><i class="fas fa-utensils"></i> Restaurant</h1>
       <table class="table">
         <thead>
           <tr>
@@ -136,7 +119,7 @@
               <td class="HoRoomType"></td>
             </tr>
           </tbody>
-          <h2 class="tableHeader"><i class="fas fa-hotel"></i> Hotels</h1>
+          <h2 class="tableHeader"><i class="fas fa-hotel"></i> Hotel</h1>
 
 
 
@@ -151,7 +134,10 @@
                   <th scope="col">Duration of flight:</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="flight-data">
+                <tr>
+                  <th colspan="6">Departing Flight</th>                  
+                </tr>
                 <tr>
                   <td class="Airline"></td>
                   <td class="FlightPrice"></td>
@@ -160,11 +146,24 @@
                   <td class="ArrivalAirport"></td>
                   <td class="Duration"></td>
                 </tr>
+                <tr>
+                    <th colspan="6">Returning Flight</th>                  
+                  </tr>
+                <tr>
+                  <td class="retAirline"></td>
+                  <td class="retFlightPrice"></td>
+                  <td class="retLeaveDate"></td>
+                  <td class="retFlightArrival"></td>
+                  <td class="retArrivalAirport"></td>
+                  <td class="retDuration"></td>
+                </tr>
+
               </tbody>
-              <h1 class="tableHeader"><i class="fas fa-plane-departure"></i> Flight</h1>
+              <h1 class="tableHeader"><i class="fas fa-plane-departure"></i> Flights</h1>
 
     </div>
   </div>
   <script src="assets/javascript/main.js"></script>
 </body>
+
 </html>

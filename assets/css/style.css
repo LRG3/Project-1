@@ -5,6 +5,14 @@ body {
     background-image: url(https://cache.desktopnexus.com/cropped-wallpapers/1992/1992196-1882x1058-[DesktopNexus.com].jpg?st=sWqlNLdPQaV6O0hGlv6o0g&e=1542306100)
   }
 
+  .email-good {
+    border:5px solid green;
+    }
+
+   .email-bad {
+    border:5px solid red;
+  }
+
   .jumbotron {
     background-color: rgb(221, 252, 253);
     font-weight: bold;
@@ -13,6 +21,7 @@ body {
     margin-top: 50px;
     margin-left: 150px;
     margin-right: 150px;
+    
 
   }
 
@@ -23,6 +32,7 @@ body {
   #vacation-button {
     float: right;
   }
+
 
   .table {
     background-color: white;
@@ -39,6 +49,7 @@ body {
         margin-top: 25px;
         margin-left: 25px;
         margin-right: 25px;
+        
   
       }
       
@@ -59,6 +70,7 @@ body {
             padding-bottom: 60px;
             margin-top: 10px;
             margin-left: 10px;
+            
           }
           #vacation-button {
             float: right;
@@ -82,6 +94,7 @@ body {
             margin-top: 0px;
             margin-left: 0px;
             margin-right: 0px;
+            
           }
 
           #flightTable {
