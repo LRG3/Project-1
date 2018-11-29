@@ -1,8 +1,8 @@
 //Random Beach Array
 var beaches = ["Kapalua Bay Beach, Maui, Hawaii", "Ocracoke Lifeguarded Beach, Outer Banks, North Carolina", "Grayton Beach State Park, Florida Panhandle",
-"Coopers Beach, Southampton, New York", "Coast Guard Beach, Cape Cod, Massachusetts", "Lighthouse Beach, Buxton, Outer Banks, North Carolina",
-"Caladesi Island State Park, Dunedin/Clearwater, Florida", "Hapuna Beach State Park, Big Island, Hawaii", "Coronado Beach, San Diego, California",
-"Beachwalker Park, Kiawah Island, South Carolina"];
+    "Coopers Beach, Southampton, New York", "Coast Guard Beach, Cape Cod, Massachusetts", "Lighthouse Beach, Buxton, Outer Banks, North Carolina",
+    "Caladesi Island State Park, Dunedin/Clearwater, Florida", "Hapuna Beach State Park, Big Island, Hawaii", "Coronado Beach, San Diego, California",
+    "Beachwalker Park, Kiawah Island, South Carolina"];
 
 var hotelData = [
     {
@@ -90,7 +90,7 @@ $("#vacation-button").on("click", function (event) {
 
     var userEmail = $("#email-add").val().trim();
 
-database.ref().push(userEmail);
+    database.ref().push(userEmail);
 })
 
 //these are just helper functions that can manupulate the DOM
@@ -124,8 +124,10 @@ function validateEmail() {
         return true;
     }
 }
+
 //Generates Random Beach Location
 var beachrandom = beaches[Math.floor(Math.random() * beaches.length)];
+
 
 //Creates a variable for the appropriate Airport code to match beach location
 var selectedDestinationCode = "";
@@ -180,7 +182,7 @@ function displayCityData(beachLocation, depDate, returnDate, userAirportCode) {
             var topRestaurantAddress = response.best_rated_restaurant[0].restaurant.location.address;
             var avgCostForTwo = response.best_rated_restaurant[0].restaurant.average_cost_for_two
             var restaurantID = response.best_rated_restaurant[0].restaurant.R.res_id;
-            
+
             var restaurntDetailQueryURL = "https://developers.zomato.com/api/v2.1/restaurant?res_id=" + restaurantID + "&apikey=937d785cc1c1b2ac1098e43a13b9cf22"
             $.ajax({
                 url: restaurntDetailQueryURL,
@@ -207,7 +209,7 @@ function displayCityData(beachLocation, depDate, returnDate, userAirportCode) {
                     $('.Cuisines').append(cuisines);
                     $('.ResName').html(`<a href="${topRestaurantURL}" target="blank">${topRestaurant}</a>`)
                     $('.ResforTwo').append("$" + avgCostForTwo);
-                    $('.ResAddress').append(topRestaurantAddress);                    
+                    $('.ResAddress').append(topRestaurantAddress);
                     $(".ArrivalAirport").append(`<a href="https://en.wikipedia.org/wiki/List_of_airports_by_IATA_code:_A" target="blank">${selectedDestinationCode}</a>`)
                     $(".Airline").append(`<a href="https://www.airfarewatchdog.com/airline-codes/" target="blank">${airlineCode}</a>`)
                     $(".FlightPrice").append("$" + flightPrice);
@@ -220,7 +222,7 @@ function displayCityData(beachLocation, depDate, returnDate, userAirportCode) {
                     $(".retLeaveDate").append(retDepartsAt);
                     $(".retFlightArrival").append(retArrivesAt);
                     $(".retDuration").append(retDuration);
-                    
+
                     populateHotelData();
                 }).catch(function (error) {
                     $('td').empty();
@@ -229,7 +231,7 @@ function displayCityData(beachLocation, depDate, returnDate, userAirportCode) {
                 })
             })
         })
-        
+
         //Hotel API --- NOT WORKING(AMADEUS SUPPORT WORKING ON ISSUE)  REPLACEMENT BAND AID ABOVE
         // var hotelQueryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-airport/?apikey=KWxHu3JXbSfuZ0ZfU5AmxbNfkmVaKQTX&location=" + selectedDestinationCode + "&check_in=" + depDate + "&check_out=" + returnDate;
         // var hotelQueryURL = "https://api.sandbox.amadeus.com/v1.2/hotels/search-airport/?apikey=KWxHu3JXbSfuZ0ZfU5AmxbNfkmVaKQTX&location=" + selectedDestinationCode + "&check_in=2019-01-02&check_out=2019-01-09"
@@ -257,8 +259,28 @@ function displayCityData(beachLocation, depDate, returnDate, userAirportCode) {
     })
 }
 
+var backdrop = document.querySelector('.backdrop');
+var modal = document.querySelector('.modal');
+var modalContent = document.querySelector('.modal-content');
+var closeButton = document.querySelector('.close');
+
+closeButton.onclick = function () {
+    modal.style.display = "none";
+    backdrop.style.display = "none";
+}
+
 //Button click event which sets EVERYTHING in motion.
 $('#vacation-button').on("click", function () {
+    anime({
+        targets: "#vacation-button",
+        opacity: [{ value: 0.5, duration: 1000 }, { value: 1, duration: 1000 }],
+        complete: function () {
+            modal.style.display = 'block';
+            backdrop.style.display = 'block';
+            modalContent.textContent = beachrandom;
+
+        }
+    });
     $('td').empty();
     depDate = $("#departure-date").val();
     returnDate = $("#returnDate").val();
@@ -268,7 +290,11 @@ $('#vacation-button').on("click", function () {
     selectedHotel = hotelData[0][beachrandom];
     generateAirportCode();
 
+
 })
+// var randombeachoutoutput = document.querySelector('#vacation-button');
+
+
 
 //This does validation whever that input form changes
 $("#email-add").keyup(function () {
